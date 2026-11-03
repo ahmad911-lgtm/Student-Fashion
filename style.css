@@ -1,0 +1,379 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "DM Sans", sans-serif;
+  color: #20231f;
+  background: #fff;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.topbar {
+  background: #1d3028;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+}
+
+.header {
+  min-height: 82px;
+  padding: 15px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+  background: white;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.logo span {
+  color: #a77b43;
+}
+
+.header nav {
+  display: flex;
+  gap: 30px;
+}
+
+.header nav a {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.header nav a:hover {
+  color: #a77b43;
+}
+
+.header-order,
+.primary-btn {
+  display: inline-block;
+  background: #1d3028;
+  color: white;
+  padding: 13px 22px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  transition: 0.25s;
+}
+
+.header-order:hover,
+.primary-btn:hover {
+  background: #a77b43;
+  transform: translateY(-2px);
+}
+
+.hero {
+  min-height: 570px;
+  background: #f2f0e9;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 55px 7%;
+  gap: 45px;
+}
+
+.hero-content {
+  max-width: 560px;
+}
+
+.eyebrow {
+  color: #a77b43;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  margin-bottom: 17px;
+}
+
+.hero h1 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.hero h1 span {
+  color: #a77b43;
+}
+
+.hero-description {
+  color: #686b65;
+  line-height: 1.8;
+  margin: 22px 0 28px;
+  max-width: 440px;
+}
+
+.hero-note {
+  font-size: 11px;
+  color: #777;
+  margin-top: 22px;
+}
+
+.hero-image {
+  height: 440px;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.benefits {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 30px 7%;
+  gap: 20px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.benefits div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.benefits strong {
+  font-size: 14px;
+}
+
+.benefits span {
+  font-size: 12px;
+  color: #888;
+}
+
+.collection {
+  padding: 85px 7%;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 42px;
+}
+
+.section-heading h2,
+.about h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 39px;
+  margin-bottom: 12px;
+}
+
+.section-heading > p:last-child {
+  color: #888;
+  font-size: 14px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.product-card {
+  border: 1px solid #eee;
+  background: white;
+  overflow: hidden;
+  transition: 0.25s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px #00000010;
+}
+
+.product-image {
+  width: 100%;
+  height: 310px;
+  object-fit: cover;
+  background: #f4f2ed;
+  display: block;
+}
+
+.product-info {
+  padding: 20px;
+}
+
+.product-category {
+  font-size: 10px;
+  color: #a77b43;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.product-info h3 {
+  font-size: 17px;
+  margin: 9px 0;
+}
+
+.product-description {
+  font-size: 12px;
+  color: #858585;
+  line-height: 1.6;
+  min-height: 38px;
+}
+
+.product-price {
+  font-size: 19px;
+  font-weight: 800;
+  margin: 15px 0;
+  color: #1d3028;
+}
+
+.stock-text {
+  color: #777;
+  font-size: 11px;
+  margin-bottom: 14px;
+}
+
+.whatsapp-btn {
+  display: block;
+  text-align: center;
+  background: #198754;
+  color: white;
+  padding: 13px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.whatsapp-btn:hover {
+  background: #116b40;
+}
+
+.loading,
+.empty-message,
+.error-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #777;
+  padding: 35px;
+}
+
+.about {
+  text-align: center;
+  padding: 75px 20px;
+  background: #f2f0e9;
+}
+
+.about > p:not(.eyebrow) {
+  max-width: 550px;
+  margin: 15px auto 28px;
+  color: #777;
+  line-height: 1.8;
+}
+
+footer {
+  background: #1d3028;
+  color: white;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.footer-logo {
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+footer p {
+  font-size: 13px;
+  color: #d2d2d2;
+  margin: 8px 0;
+}
+
+.copyright {
+  border-top: 1px solid #ffffff25;
+  margin-top: 25px;
+  padding-top: 20px;
+  font-size: 11px;
+}
+
+@media (max-width: 800px) {
+  .header {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .header nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 50px 6%;
+  }
+
+  .hero-image {
+    height: 350px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+  }
+
+  .product-image {
+    height: 240px;
+  }
+}
+
+@media (max-width: 520px) {
+  .logo {
+    font-size: 19px;
+  }
+
+  .header nav a {
+    font-size: 12px;
+  }
+
+  .hero h1 {
+    font-size: 42px;
+  }
+
+  .benefits {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .collection {
+    padding: 60px 5%;
+  }
+
+  .section-heading h2,
+  .about h2 {
+    font-size: 31px;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-image {
+    height: 320px;
+  }
+}

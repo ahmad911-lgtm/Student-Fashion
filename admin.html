@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#182b24">
+  <title>Admin Dashboard | Student Fashion</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202821;
+      --muted: #727b74;
+      --green: #1d3028;
+      --green-2: #29473a;
+      --gold: #a77b43;
+      --paper: #f5f5f1;
+      --line: #e6e8e1;
+      --white: #fff;
+      --danger: #a23c32;
+      font-family: "DM Sans", "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; color: var(--ink); background: var(--paper); }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
+    .topbar { min-height: 70px; padding: 14px clamp(18px, 5vw, 72px); display: flex; align-items: center; justify-content: space-between; gap: 16px; background: var(--green); color: white; }
+    .brand { color: white; text-decoration: none; font-weight: 800; letter-spacing: .04em; font-size: 18px; }
+    .brand span { color: #d5ac76; }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .topbar-note { color: #d7ded8; font-size: 13px; }
+    .page { width: min(1160px, calc(100% - 36px)); margin: 42px auto 72px; }
+    .intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 26px; }
+    .eyebrow { margin: 0 0 8px; color: var(--gold); font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0; font-family: Georgia, serif; font-size: clamp(30px, 4vw, 42px); font-weight: 600; letter-spacing: -.025em; }
+    .subheading { margin: 9px 0 0; color: var(--muted); font-size: 14px; }
+    .panel { padding: clamp(20px, 3vw, 30px); background: var(--white); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 8px 28px #23352b08; }
+    .login-wrap { max-width: 490px; margin: 68px auto; }
+    .login-wrap .panel { padding: clamp(24px, 5vw, 42px); }
+    .login-title { font-family: Georgia, serif; font-size: 29px; margin: 0 0 8px; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .field { min-width: 0; }
+    .field.full { grid-column: 1 / -1; }
+    label { display: block; margin-bottom: 7px; font-size: 12px; font-weight: 700; color: #465048; }
+    input, textarea, select { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid #d9ded7; border-radius: 6px; outline: none; background: white; color: var(--ink); }
+    textarea { min-height: 90px; resize: vertical; }
+    input:focus, textarea:focus, select:focus { border-color: var(--green-2); box-shadow: 0 0 0 3px #29473a16; }
+    .help { margin: 6px 0 0; color: var(--muted); font-size: 11px; }
+    .image-preview { display: flex; align-items: center; gap: 12px; margin-top: 12px; padding: 10px; border: 1px solid var(--line); border-radius: 8px; }
+    .image-preview img { width: 68px; height: 68px; object-fit: cover; border-radius: 5px; background: #f1f0e9; }
+    .image-preview-copy { min-width: 0; flex: 1; }
+    .image-preview-copy p { margin: 0 0 7px; color: var(--muted); font-size: 11px; }
+    .btn { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; border: 1px solid transparent; border-radius: 6px; background: var(--green); color: white; font-size: 13px; font-weight: 700; transition: background .15s, transform .15s; }
+    .btn:hover { background: var(--green-2); transform: translateY(-1px); }
+    .btn:disabled { cursor: wait; opacity: .65; transform: none; }
+    .btn.secondary { background: white; color: var(--green); border-color: #cbd3cb; }
+    .btn.secondary:hover { background: #f4f6f2; }
+    .btn.danger { background: white; color: var(--danger); border-color: #e6c9c5; }
+    .btn.danger:hover { background: #fff5f3; }
+    .btn.small { min-height: 34px; padding: 7px 11px; font-size: 12px; }
+    .login-actions { margin-top: 20px; }
+    .status { min-height: 20px; margin: 12px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .status.error { color: var(--danger); }
+    .status.success { color: #23734a; }
+    .dashboard { display: grid; grid-template-columns: minmax(290px, 370px) minmax(0, 1fr); align-items: start; gap: 22px; }
+    .panel-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+    .panel-heading h2 { margin: 0; font-size: 17px; }
+    .panel-heading p { color: var(--muted); margin: 6px 0 0; font-size: 12px; }
+    .form-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 17px; }
+    .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .toolbar input { min-width: 0; }
+    .count { flex: 0 0 auto; color: var(--muted); font-size: 12px; }
+    .product-list { display: grid; gap: 11px; }
+    .product { display: grid; grid-template-columns: 76px minmax(0, 1fr) auto; align-items: center; gap: 14px; min-width: 0; padding: 12px; border: 1px solid var(--line); border-radius: 9px; }
+    .thumb { width: 76px; height: 82px; display: grid; place-items: center; overflow: hidden; border-radius: 6px; background: #f1f0e9; color: #8a9089; font-size: 11px; text-align: center; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .product-info { min-width: 0; }
+    .product-name { margin: 0; overflow-wrap: anywhere; font-size: 14px; font-weight: 750; }
+    .product-meta { margin: 5px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+    .product-description { margin: 5px 0 0; color: #626a63; font-size: 12px; line-height: 1.4; }
+    .product-actions { display: flex; gap: 7px; }
+    .empty { padding: 36px 18px; border: 1px dashed #cfd5ce; border-radius: 8px; color: var(--muted); text-align: center; font-size: 13px; }
+    .footer-note { margin-top: 20px; color: var(--muted); text-align: center; font-size: 11px; }
+    @media (max-width: 860px) { .dashboard { grid-template-columns: 1fr; } .form-panel { order: 1; } .products-panel { order: 2; } }
+    @media (max-width: 540px) {
+      .topbar { min-height: 62px; padding-inline: 16px; }
+      .brand { font-size: 15px; }
+      .topbar-note { display: none; }
+      .page { width: min(100% - 24px, 1160px); margin: 28px auto 48px; }
+      .intro { align-items: flex-start; flex-direction: column; }
+      .login-wrap { margin: 35px auto; }
+      .form-grid { grid-template-columns: 1fr; gap: 13px; }
+      .field.full { grid-column: auto; }
+      .product { grid-template-columns: 58px minmax(0, 1fr); gap: 11px; }
+      .thumb { width: 58px; height: 68px; }
+      .product-actions { grid-column: 1 / -1; justify-content: flex-end; }
+      .toolbar { align-items: stretch; flex-direction: column; }
+      .toolbar .count { align-self: flex-end; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">STUDENT <span>FASHION</span></a>
+    <div class="topbar-right">
+      <span id="topbar-note" class="topbar-note">Secure product management</span>
+      <button id="logout-button" class="btn secondary small hidden" type="button">Log out</button>
+    </div>
+  </header>
+
+  <main id="login-view" class="login-wrap">
+    <section class="panel" aria-labelledby="login-title">
+      <p class="eyebrow">Store management</p>
+      <h1 id="login-title" class="login-title">Admin sign in</h1>
+      <p class="subheading">Sign in with your admin account to manage the collection.</p>
+      <form id="login-form" autocomplete="on">
+        <div class="field" style="margin-top:22px">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" autocomplete="username" required>
+        </div>
+        <div class="field" style="margin-top:15px">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <div class="login-actions"><button id="login-button" class="btn" type="submit">Sign in</button></div>
+        <p id="login-status" class="status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+    <p class="footer-note">Student Fashion · Admin access</p>
+  </main>
+
+  <main id="dashboard-view" class="page hidden">
+    <div class="intro">
+      <div>
+        <p class="eyebrow">Store management</p>
+        <h1>Product dashboard</h1>
+        <p class="subheading">Add, update, and remove products in your storefront.</p>
+      </div>
+    </div>
+
+    <div class="dashboard">
+      <section class="panel form-panel" aria-labelledby="form-title">
+        <div class="panel-heading">
+          <div><h2 id="form-title">Add a product</h2><p id="form-subtitle">Fill in the product details below.</p></div>
+        </div>
+        <form id="product-form">
+          <div class="form-grid">
+            <div class="field full"><label for="product-name">Product name</label><input id="product-name" name="name" maxlength="120" required></div>
+            <div class="field"><label for="product-price">Price (Rs.)</label><input id="product-price" name="price" type="number" min="0" step="0.01" required></div>
+            <div class="field"><label for="product-stock">Stock quantity</label><input id="product-stock" name="stock" type="number" min="0" step="1" value="0" required></div>
+            <div class="field full"><label for="product-category">Category</label><input id="product-category" name="category" maxlength="80" placeholder="e.g. Men's Unstitched Fabric" required></div>
+            <div class="field full">
+              <label for="product-image">Image URL (optional)</label>
+              <input id="product-image" name="image" type="url" inputmode="url" placeholder="https://example.com/image.jpg">
+              <p class="help">Image link ke bajaye neeche apne device se tasveer bhi select kar sakte hain.</p>
+              <label for="product-image-file" style="margin-top:13px">Ya device se image upload karein</label>
+              <input id="product-image-file" name="imageFile" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp">
+              <p class="help">JPG, PNG ya WebP · max original size 10 MB. Image optimize hokar product ke saath save hogi.</p>
+              <div id="image-preview" class="image-preview hidden">
+                <img id="image-preview-img" alt="Selected product image preview">
+                <div class="image-preview-copy"><p id="image-preview-caption">Image preview</p><button id="remove-image-button" class="btn danger small" type="button">Remove image</button></div>
+              </div>
+            </div>
+            <div class="field full"><label for="product-description">Description</label><textarea id="product-description" name="description" maxlength="1000" placeholder="Product details"></textarea></div>
+          </div>
+          <div class="form-actions">
+            <button id="save-product-button" class="btn" type="submit">Add product</button>
+            <button id="cancel-edit-button" class="btn secondary hidden" type="button">Cancel edit</button>
+          </div>
+          <p id="product-status" class="status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="panel products-panel" aria-labelledby="products-title">
+        <div class="panel-heading">
+          <div><h2 id="products-title">Your products</h2><p>Products currently saved in your store.</p></div>
+          <button id="refresh-button" class="btn secondary small" type="button">Refresh</button>
+        </div>
+        <div class="toolbar">
+          <input id="search-products" type="search" aria-label="Search products" placeholder="Search name or category">
+          <span id="product-count" class="count">0 products</span>
+        </div>
+        <p id="list-status" class="status" role="status" aria-live="polite"></p>
+        <div id="product-list" class="product-list" aria-live="polite"></div>
+      </section>
+    </div>
+    <p class="footer-note">Changes are saved to the Student Fashion product database.</p>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+      const isLocalPreview = location.protocol === "file:" ||
+        (["localhost", "127.0.0.1"].includes(location.hostname) && location.port !== "8888");
+      const API_ORIGIN = isLocalPreview ? "http://localhost:5000" : "";
+      const API_BASE = `${API_ORIGIN}/api/admin`;
+      const TOKEN_KEY = "studentFashionAdminToken";
+      const MAX_IMAGE_FILE_BYTES = 10 * 1024 * 1024;
+      const MAX_SAVED_IMAGE_CHARS = 2_800_000;
+      const els = Object.fromEntries([
+        "loginView", "dashboardView", "loginForm", "loginButton", "loginStatus", "logoutButton",
+        "productForm", "formTitle", "formSubtitle", "saveProductButton", "cancelEditButton", "productStatus",
+        "productList", "productCount", "listStatus", "searchProducts", "refreshButton", "topbarNote",
+        "imagePreview", "imagePreviewImage", "imagePreviewCaption", "removeImageButton"
+      ].map(key => [key, document.getElementById(({loginView:"login-view",dashboardView:"dashboard-view",loginForm:"login-form",loginButton:"login-button",loginStatus:"login-status",logoutButton:"logout-button",productForm:"product-form",formTitle:"form-title",formSubtitle:"form-subtitle",saveProductButton:"save-product-button",cancelEditButton:"cancel-edit-button",productStatus:"product-status",productList:"product-list",productCount:"product-count",listStatus:"list-status",searchProducts:"search-products",refreshButton:"refresh-button",topbarNote:"topbar-note",imagePreview:"image-preview",imagePreviewImage:"image-preview-img",imagePreviewCaption:"image-preview-caption",removeImageButton:"remove-image-button"})[key])]));
+      let products = [];
+      let editingId = null;
+      let originalImageValue = "";
+      let selectedImageData = "";
+      let imageCleared = false;
+      let token = sessionStorage.getItem(TOKEN_KEY);
+
+      function setStatus(node, message = "", type = "") {
+        node.textContent = message;
+        node.className = `status${type ? ` ${type}` : ""}`;
+      }
+      function setScreen(isLoggedIn) {
+        els.loginView.classList.toggle("hidden", isLoggedIn);
+        els.dashboardView.classList.toggle("hidden", !isLoggedIn);
+        els.logoutButton.classList.toggle("hidden", !isLoggedIn);
+        els.topbarNote.textContent = isLoggedIn ? "Signed in to admin" : "Secure product management";
+      }
+      function safeImageUrl(raw) {
+        if (!raw || typeof raw !== "string") return "";
+        try {
+          const url = new URL(raw.trim());
+          return url.protocol === "https:" || url.protocol === "http:" ? url.href : "";
+        } catch { return ""; }
+      }
+      function safeImageSource(raw) {
+        const url = safeImageUrl(raw);
+        if (url) return url;
+        if (typeof raw !== "string" || raw.length > MAX_SAVED_IMAGE_CHARS) return "";
+        return /^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(raw) ? raw : "";
+      }
+      function showImagePreview(src, caption) {
+        const validSrc = safeImageSource(src);
+        if (!validSrc) {
+          els.imagePreview.classList.add("hidden");
+          els.imagePreviewImage.removeAttribute("src");
+          return;
+        }
+        els.imagePreviewImage.src = validSrc;
+        els.imagePreviewCaption.textContent = caption;
+        els.imagePreview.classList.remove("hidden");
+      }
+      async function optimizeImageFile(file) {
+        if (!file || !["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+          throw new Error("JPG, PNG, ya WebP image select karein.");
+        }
+        if (file.size > MAX_IMAGE_FILE_BYTES) throw new Error("Image file 10 MB se chhoti honi chahiye.");
+        const objectUrl = URL.createObjectURL(file);
+        try {
+          const image = new Image();
+          image.src = objectUrl;
+          await image.decode();
+          const scale = Math.min(1, 1200 / Math.max(image.naturalWidth, image.naturalHeight));
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+          canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+          const context = canvas.getContext("2d");
+          if (!context) throw new Error("Image optimize nahi ho saki. Image URL use karein.");
+          context.drawImage(image, 0, 0, canvas.width, canvas.height);
+          const optimized = canvas.toDataURL("image/webp", 0.78);
+          if (!optimized.startsWith("data:image/webp;base64,")) throw new Error("Browser image upload support nahi kar raha. Image URL use karein.");
+          if (optimized.length > MAX_SAVED_IMAGE_CHARS) throw new Error("Optimized image bari hai. Chhoti image select karein ya image URL use karein.");
+          return optimized;
+        } finally { URL.revokeObjectURL(objectUrl); }
+      }
+      async function api(path, options = {}) {
+        const headers = new Headers(options.headers || {});
+        if (token) headers.set("Authorization", `Bearer ${token}`);
+        if (options.body && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+        let response;
+        try {
+          response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+        } catch {
+          throw new Error("Could not reach the API. Check that the backend is running on port 5000.");
+        }
+        let data = {};
+        try { data = await response.json(); } catch { /* An empty response is handled below. */ }
+        if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            token = null;
+            sessionStorage.removeItem(TOKEN_KEY);
+            setScreen(false);
+            throw new Error("Your session expired. Please sign in again.");
+          }
+          throw new Error(data.message || `Request failed (${response.status}).`);
+        }
+        return data;
+      }
+      function element(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+      function renderProducts() {
+        const query = els.searchProducts.value.trim().toLocaleLowerCase();
+        const filtered = products.filter(product => `${product.name || ""} ${product.category || ""}`.toLocaleLowerCase().includes(query));
+        els.productCount.textContent = `${filtered.length} ${filtered.length === 1 ? "product" : "products"}`;
+        els.productList.replaceChildren();
+        if (!filtered.length) {
+          els.productList.append(element("p", "empty", products.length ? "No products match your search." : "No products yet. Add your first product using the form.") );
+          return;
+        }
+        for (const product of filtered) {
+          const row = element("article", "product");
+          const thumb = element("div", "thumb", "No image");
+          const imageUrl = safeImageSource(product.image);
+          if (imageUrl) {
+            const image = document.createElement("img");
+            image.alt = String(product.name || "Product image");
+            image.loading = "lazy";
+            image.referrerPolicy = "no-referrer";
+            image.src = imageUrl;
+            image.addEventListener("error", () => { image.remove(); thumb.textContent = "Image unavailable"; }, { once: true });
+            thumb.replaceChildren(image);
+          }
+          const info = element("div", "product-info");
+          info.append(element("h3", "product-name", String(product.name || "Untitled product")));
+          info.append(element("p", "product-meta", `${String(product.category || "Uncategorised")} · Rs. ${Number(product.price || 0).toLocaleString("en-PK")} · Stock: ${Number(product.stock || 0)}`));
+          if (product.description) info.append(element("p", "product-description", String(product.description)));
+          const actions = element("div", "product-actions");
+          const editButton = element("button", "btn secondary small", "Edit");
+          editButton.type = "button";
+          editButton.addEventListener("click", () => startEdit(product));
+          const deleteButton = element("button", "btn danger small", "Delete");
+          deleteButton.type = "button";
+          deleteButton.addEventListener("click", () => deleteProduct(product));
+          actions.append(editButton, deleteButton);
+          row.append(thumb, info, actions);
+          els.productList.append(row);
+        }
+      }
+      async function loadProducts() {
+        els.refreshButton.disabled = true;
+        setStatus(els.listStatus, "Loading products…");
+        try {
+          const result = await api("/products");
+          products = Array.isArray(result) ? result : [];
+          renderProducts();
+          setStatus(els.listStatus, "");
+        } catch (error) {
+          setStatus(els.listStatus, error.message, "error");
+        } finally { els.refreshButton.disabled = false; }
+      }
+      function resetProductForm() {
+        editingId = null;
+        originalImageValue = "";
+        selectedImageData = "";
+        imageCleared = false;
+        els.productForm.reset();
+        els.productForm.elements.stock.value = "0";
+        showImagePreview("", "");
+        els.formTitle.textContent = "Add a product";
+        els.formSubtitle.textContent = "Fill in the product details below.";
+        els.saveProductButton.textContent = "Add product";
+        els.cancelEditButton.classList.add("hidden");
+        setStatus(els.productStatus, "");
+      }
+      function startEdit(product) {
+        editingId = product._id;
+        originalImageValue = safeImageSource(product.image);
+        selectedImageData = "";
+        imageCleared = false;
+        els.productForm.elements.name.value = product.name || "";
+        els.productForm.elements.price.value = product.price ?? "";
+        els.productForm.elements.category.value = product.category || "";
+        els.productForm.elements.description.value = product.description || "";
+        els.productForm.elements.image.value = safeImageUrl(product.image) || "";
+        els.productForm.elements.imageFile.value = "";
+        showImagePreview(originalImageValue, "Current image. Nayi image chun kar replace kar sakte hain.");
+        els.productForm.elements.stock.value = product.stock ?? 0;
+        els.formTitle.textContent = "Edit product";
+        els.formSubtitle.textContent = `Updating ${product.name || "this product"}.`;
+        els.saveProductButton.textContent = "Save changes";
+        els.cancelEditButton.classList.remove("hidden");
+        setStatus(els.productStatus, "");
+        document.getElementById("product-name").focus();
+        document.querySelector(".form-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      async function deleteProduct(product) {
+        if (!window.confirm(`Delete “${String(product.name || "this product")}”? This cannot be undone.`)) return;
+        setStatus(els.listStatus, "Deleting product…");
+        try {
+          const result = await api(`/products/${encodeURIComponent(product._id)}`, { method: "DELETE" });
+          products = products.filter(item => item._id !== product._id);
+          if (editingId === product._id) resetProductForm();
+          renderProducts();
+          setStatus(els.listStatus, result.message || "Product deleted.", "success");
+        } catch (error) { setStatus(els.listStatus, error.message, "error"); }
+      }
+
+      els.loginForm.addEventListener("submit", async event => {
+        event.preventDefault();
+        const button = els.loginButton;
+        button.disabled = true;
+        button.textContent = "Signing in…";
+        setStatus(els.loginStatus, "");
+        try {
+          const username = els.loginForm.elements.username.value.trim();
+          const password = els.loginForm.elements.password.value;
+          const result = await fetch(`${API_BASE}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+          });
+          let data = {};
+          try { data = await result.json(); } catch { /* Show a useful message for an unexpected response. */ }
+          if (!result.ok || !data.token) throw new Error(data.message || "Sign in failed. Check your username and password.");
+          token = data.token;
+          sessionStorage.setItem(TOKEN_KEY, token);
+          els.loginForm.reset();
+          setScreen(true);
+          await loadProducts();
+        } catch (error) {
+          const message = error instanceof TypeError ? "Could not reach the API. Check that the backend is running on port 5000." : error.message;
+          setStatus(els.loginStatus, message, "error");
+        } finally { button.disabled = false; button.textContent = "Sign in"; }
+      });
+
+      els.productForm.addEventListener("submit", async event => {
+        event.preventDefault();
+        if (!els.productForm.reportValidity()) return;
+        const form = els.productForm.elements;
+        const rawImage = form.image.value.trim();
+        if (rawImage && !safeImageUrl(rawImage)) {
+          setStatus(els.productStatus, "Enter a valid image link using http:// or https://.", "error");
+          form.image.focus();
+          return;
+        }
+        const price = Number(form.price.value);
+        const stock = Number(form.stock.value);
+        if (!Number.isFinite(price) || price < 0 || !Number.isInteger(stock) || stock < 0) {
+          setStatus(els.productStatus, "Price must be zero or more, and stock must be a whole number zero or more.", "error");
+          return;
+        }
+        const payload = {
+          name: form.name.value.trim(),
+          price,
+          category: form.category.value.trim(),
+          description: form.description.value.trim(),
+          image: selectedImageData || (rawImage ? safeImageUrl(rawImage) : (imageCleared ? "" : originalImageValue)),
+          stock
+        };
+        const isEditing = Boolean(editingId);
+        els.saveProductButton.disabled = true;
+        setStatus(els.productStatus, isEditing ? "Saving changes…" : "Adding product…");
+        try {
+          const path = isEditing ? `/products/${encodeURIComponent(editingId)}` : "/products";
+          const result = await api(path, { method: isEditing ? "PUT" : "POST", body: JSON.stringify(payload) });
+          if (isEditing) products = products.map(product => product._id === editingId ? result.product : product);
+          else products = [result.product, ...products];
+          resetProductForm();
+          renderProducts();
+          setStatus(els.productStatus, result.message || (isEditing ? "Product updated." : "Product added."), "success");
+        } catch (error) { setStatus(els.productStatus, error.message, "error"); }
+        finally { els.saveProductButton.disabled = false; }
+      });
+
+      els.productForm.elements.image.addEventListener("input", event => {
+        selectedImageData = "";
+        imageCleared = !event.currentTarget.value.trim();
+        showImagePreview(event.currentTarget.value.trim(), "Image URL preview");
+      });
+      els.productForm.elements.imageFile.addEventListener("change", async event => {
+        const file = event.currentTarget.files && event.currentTarget.files[0];
+        if (!file) return;
+        setStatus(els.productStatus, "Image optimize ho rahi hai…");
+        try {
+          selectedImageData = await optimizeImageFile(file);
+          imageCleared = false;
+          els.productForm.elements.image.value = "";
+          showImagePreview(selectedImageData, "Selected image ready hai. Product save karne par upload hogi.");
+          setStatus(els.productStatus, "Image selected aur optimize ho gayi.", "success");
+        } catch (error) {
+          selectedImageData = "";
+          event.currentTarget.value = "";
+          setStatus(els.productStatus, error.message, "error");
+        }
+      });
+      els.removeImageButton.addEventListener("click", () => {
+        selectedImageData = "";
+        originalImageValue = "";
+        imageCleared = true;
+        els.productForm.elements.image.value = "";
+        els.productForm.elements.imageFile.value = "";
+        showImagePreview("", "");
+        setStatus(els.productStatus, "Save karne par product image remove ho jayegi.");
+      });
+
+      els.cancelEditButton.addEventListener("click", resetProductForm);
+      els.searchProducts.addEventListener("input", renderProducts);
+      els.refreshButton.addEventListener("click", loadProducts);
+      els.logoutButton.addEventListener("click", () => {
+        token = null;
+        sessionStorage.removeItem(TOKEN_KEY);
+        products = [];
+        els.searchProducts.value = "";
+        resetProductForm();
+        els.productList.replaceChildren();
+        setStatus(els.listStatus, "");
+        setScreen(false);
+        els.loginForm.elements.username.focus();
+      });
+
+      if (token) {
+        setScreen(true);
+        loadProducts();
+      } else setScreen(false);
+    })();
+  </script>
+</body>
+</html>
