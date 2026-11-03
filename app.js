@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 
-const Product = require("./models/product");
+const Product = require("./models/Product");
 const adminRoutes = require("./routes/admin");
 
 const app = express();

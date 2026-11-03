@@ -3,7 +3,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
-const Product = require("../models/product");
+const Product = require("../models/Product");
 const protectAdmin = require("../middleware/auth");
 
 const router = express.Router();
