@@ -190,10 +190,7 @@
   <script>
     (() => {
       "use strict";
-      const isLocalPreview = location.protocol === "file:" ||
-        (["localhost", "127.0.0.1"].includes(location.hostname) && location.port !== "8888");
-      const API_ORIGIN = isLocalPreview ? "http://localhost:5000" : "";
-      const API_BASE = `${API_ORIGIN}/api/admin`;
+      const API_BASE = "/api/admin";
       const TOKEN_KEY = "studentFashionAdminToken";
       const MAX_IMAGE_FILE_BYTES = 10 * 1024 * 1024;
       const MAX_SAVED_IMAGE_CHARS = 2_800_000;
@@ -275,7 +272,7 @@
         try {
           response = await fetch(`${API_BASE}${path}`, { ...options, headers });
         } catch {
-          throw new Error("Could not reach the API. Check that the backend is running on port 5000.");
+          throw new Error("Could not reach the server. Please check your connection and try again.");
         }
         let data = {};
         try { data = await response.json(); } catch { /* An empty response is handled below. */ }
@@ -416,7 +413,7 @@
           setScreen(true);
           await loadProducts();
         } catch (error) {
-          const message = error instanceof TypeError ? "Could not reach the API. Check that the backend is running on port 5000." : error.message;
+          const message = error instanceof TypeError ? "Could not reach the server. Please check your connection and try again." : error.message;
           setStatus(els.loginStatus, message, "error");
         } finally { button.disabled = false; button.textContent = "Sign in"; }
       });
