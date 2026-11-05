@@ -1,8 +1,5 @@
 
-const LOCAL_API_ORIGIN = "http://localhost:5000";
-const isLocalPreview = location.protocol === "file:" ||
-  (["localhost", "127.0.0.1"].includes(location.hostname) && location.port !== "8888");
-const API_URL = `${isLocalPreview ? LOCAL_API_ORIGIN : ""}/api/products`;
+const API_URL = "/api/products";
 const WHATSAPP_NUMBER = "923270127065";
 
 const productList = document.getElementById("product-list");
@@ -99,8 +96,8 @@ async function loadProducts() {
 
     productList.innerHTML = `
       <p class="error-message">
-        Unable to load products. Please make sure the Student Fashion
-        backend is running on port 5000.
+        Unable to load products right now. Please refresh the page or
+        try again in a moment.
       </p>
     `;
   }
